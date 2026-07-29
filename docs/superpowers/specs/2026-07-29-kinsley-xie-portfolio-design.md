@@ -32,15 +32,15 @@
 网站为单页滚动叙事：
 
 1. Hero
-2. About Me
-3. Experience
-4. Selected Work
-5. Social Media
-6. Visual Archive
+2. Experience
+3. Selected Work
+4. Social Media
+5. Visual Archive
+6. About Me
 7. Contact
 8. Footer
 
-顶部导航固定或在滚动时保持轻量可达，通过锚点跳转到 ABOUT、WORK、SOCIAL、PHOTO 和 CONTACT。移动端使用简洁的菜单面板。
+内容顺序遵循“先成果、后人物”的叙事策略：招聘方首先看到品牌营销、内容运营与账号增长能力，再在页面后段了解个人定位。顶部导航固定或在滚动时保持轻量可达，通过锚点跳转到 WORK、SOCIAL、PHOTO、ABOUT 和 CONTACT。移动端使用简洁的菜单面板。
 
 ## 5. Hero
 
@@ -68,22 +68,7 @@ XIE
 
 底部三点信息为 BASED IN NANJING、SCROLL、AVAILABLE FOR OPPORTUNITIES。
 
-## 6. About Me
-
-采用不对称双栏布局。左侧为 `/images/profile.jpg` 人像占位，右侧为中文自我介绍：
-
-> KINSLEY XIE is a creative marketer focusing on brand marketing, content operation and visual storytelling.
->
-> 拥有汽车品牌市场营销、互联网内容运营及个人账号运营经验，能够完成从策略规划、内容制作到传播运营的完整流程。
-
-下方以紧凑信息行展示：
-
-- Education：南京航空航天大学金城学院 / 广播电视编导 / 2023.09-2027.07
-- Skills：内容策划、品牌传播、视频制作、视觉设计、数据复盘、AI 工作流
-- Tools：Codex、剪映、DaVinci Resolve、Premiere Pro、Photoshop、PowerPoint
-- Contact：邮箱、电话、南京
-
-## 7. Experience
+## 6. Experience
 
 经历区采用 Creative Agency Case Study 式的全宽条目，而不是卡片。
 
@@ -97,7 +82,7 @@ XIE
 
 所有描述只整理简历已有事实，不补写未经证实的转化率、销售额或曝光数据。
 
-## 8. Selected Work
+## 7. Selected Work
 
 创建三个案例入口：
 
@@ -107,7 +92,7 @@ XIE
 
 每个案例展示封面占位、背景、职责、执行与结果。第一阶段在页面内展开摘要，不新增独立详情页。所有项目图像使用可替换占位，真实项目素材到位后可无须修改组件结构直接替换。
 
-## 9. Social Media
+## 8. Social Media
 
 重点展示小红书时尚穿搭账号的 0-1 运营成果，采用创作者主页式布局，但不仿制平台 UI。
 
@@ -120,7 +105,7 @@ XIE
 
 账号截图使用占位区域。`VIEW PROFILE ↗` 在未提供真实主页链接前显示为不可跳转的预留按钮，并设置清晰提示，避免虚构链接。
 
-## 10. Visual Archive
+## 9. Visual Archive
 
 摄影区使用响应式 Masonry Grid。首期提供一组不同宽高比的灰阶占位块，路径预留为 `/images/photo/`。
 
@@ -131,6 +116,24 @@ XIE
 - 键盘 Escape 关闭，左右方向键切换。
 - 移动端支持触摸浏览。
 - 占位内容不会伪装成真实摄影作品。
+
+## 10. About Me
+
+About Me 放在经历、案例、社媒成果与视觉作品之后，承担“补充人物定位”的作用，不承担简历开场功能。
+
+采用不对称双栏布局。左侧为 `/images/profile.jpg` 人像占位，右侧为中文自我介绍：
+
+> KINSLEY XIE is a creative marketer focusing on brand marketing, content operation and visual storytelling.
+>
+> 拥有汽车品牌市场营销、互联网内容运营及个人账号运营经验，能够完成从策略规划、内容制作到传播运营的完整流程。
+
+下方仅以紧凑信息行展示：
+
+- Skills：内容策划、品牌传播、视频制作、视觉设计、数据复盘、AI 工作流
+- Tools：Codex、剪映、DaVinci Resolve、Premiere Pro、Photoshop、PowerPoint
+- Contact：邮箱、电话、南京
+
+网站不出现学校、专业、学历层级或在读时间，避免教育背景抢占职业能力的叙事权重。
 
 ## 11. Contact
 
