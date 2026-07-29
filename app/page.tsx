@@ -1,4 +1,5 @@
 import About from "@/components/About";
+import BrandIntro from "@/components/BrandIntro";
 import Contact from "@/components/Contact";
 import Experience from "@/components/Experience";
 import Footer from "@/components/Footer";
@@ -11,6 +12,7 @@ import SocialMedia from "@/components/SocialMedia";
 export default function Home() {
   return (
     <main>
+      <BrandIntro />
       <Navigation />
       <Hero />
       <Experience />

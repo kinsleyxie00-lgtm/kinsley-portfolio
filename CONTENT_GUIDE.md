@@ -35,3 +35,13 @@
 ## 调整页面顺序
 
 页面顺序集中在 `app/page.tsx`。移动组件的位置即可调整章节顺序。
+
+## 开屏动画配置
+
+开屏时间、文案轮换、矩阵行数和调试开关集中在 `data/intro.ts`。
+
+- 开发环境默认每次刷新重播：`forceReplayInDevelopment: true`
+- 改为 `false` 后，同一浏览会话只播放一次。
+- 在任意环境临时强制重播：网址后添加 `?replay-intro=1`
+- 强制检查完整动画：添加 `?replay-intro=1&full-motion=1`
+- 强制检查减少动态效果：添加 `?replay-intro=1&reduced-motion=1`

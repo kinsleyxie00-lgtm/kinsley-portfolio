@@ -1,0 +1,20 @@
+export const introConfig = {
+  storageKey: "kinsley-brand-intro-v1",
+  forceReplayInDevelopment: true,
+  forceFullMotionInDevelopment: true,
+  forceReplayQuery: "replay-intro",
+  forceFullMotionQuery: "full-motion",
+  forceReducedMotionQuery: "reduced-motion",
+  duration: 4000,
+  reducedMotionDuration: 180,
+  matrixRows: 9,
+  phases: {
+    ksx: 200,
+    expanded: 1100,
+    matrix: 1700,
+    seeking: 2700,
+    brand: 3300,
+    complete: 4000,
+  },
+  seekingWords: ["OPPORTUNITY", "CHALLENGE", "IMPACT", "NEXT", "X"],
+} as const;
