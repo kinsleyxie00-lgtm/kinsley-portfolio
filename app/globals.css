@@ -106,45 +106,98 @@ button {
   position: relative;
 }
 
-.hero__center {
-  left: 50%;
+.hero-matrix {
+  inset: 58px 0 56px;
+  overflow: hidden;
   position: absolute;
-  top: 49%;
-  transform: translate(-50%, -50%);
-  width: calc(100% - 56px);
 }
 
-.hero__eyebrow {
-  font-size: 11px;
+.hero-matrix__row {
+  align-items: center;
+  display: grid;
+  font-size: clamp(30px, 4.15vw, 74px);
+  font-stretch: condensed;
+  font-weight: 900;
+  grid-template-columns: 1fr 1fr;
+  height: calc(100% / 11);
+  letter-spacing: -0.065em;
+  line-height: 0.8;
+  padding: 0 clamp(28px, 10vw, 180px);
+  text-transform: uppercase;
+  transform-origin: center;
+}
+
+.hero-matrix__row span:last-child {
+  text-align: right;
+}
+
+.hero-matrix__row:nth-child(2n) {
+  padding-left: clamp(70px, 17vw, 310px);
+  padding-right: clamp(70px, 17vw, 310px);
+}
+
+.hero-matrix__row:nth-child(3n) {
+  opacity: 0.72 !important;
+}
+
+.hero-focus {
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom: 1px solid var(--ink);
+  border-top: 1px solid var(--ink);
+  left: 50%;
+  padding: clamp(20px, 3vh, 36px) 3vw clamp(18px, 2.5vh, 30px);
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  width: min(88vw, 1450px);
+  z-index: 2;
+}
+
+.hero-focus__rule {
+  background: var(--ink);
+  height: 5px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: -3px;
+  transform-origin: left;
+}
+
+.hero-focus__eyebrow {
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.22em;
-  margin: 0 0 2vh;
+  letter-spacing: 0.24em;
+  margin: 0 0 13px;
   text-align: center;
 }
 
-.hero h1 {
-  font-size: clamp(80px, 13vw, 220px);
+.hero-focus h1 {
+  display: flex;
+  font-size: clamp(74px, 12.5vw, 205px);
   font-weight: 900;
-  letter-spacing: -0.08em;
-  line-height: 0.73;
+  justify-content: center;
+  letter-spacing: -0.09em;
+  line-height: 0.72;
   margin: 0;
   text-align: center;
-  transform-origin: center top;
+  white-space: nowrap;
 }
 
-.hero h1 span {
-  display: block;
+.hero-focus h1 span + span {
+  margin-left: 0.11em;
 }
 
-.hero__disciplines {
+.hero-focus__meta {
   display: flex;
   flex-wrap: wrap;
-  font-size: 10px;
+  font-size: 8px;
   font-weight: 700;
-  gap: 12px 30px;
+  gap: 8px 28px;
   justify-content: center;
-  letter-spacing: 0.12em;
-  margin-top: 5vh;
+  letter-spacing: 0.17em;
+  margin-top: 22px;
+  text-transform: uppercase;
 }
 
 .hero__footer {
@@ -657,18 +710,44 @@ dd {
     min-height: 580px;
   }
 
-  .hero__center {
+  .hero-matrix {
+    inset: 58px 0 54px;
+  }
+
+  .hero-matrix__row {
+    font-size: clamp(25px, 7vw, 50px);
+    padding: 0 20px;
+  }
+
+  .hero-matrix__row:nth-child(2n) {
+    padding-left: 12vw;
+    padding-right: 12vw;
+  }
+
+  .hero-focus {
+    padding: 24px 16px 20px;
     width: calc(100% - 40px);
   }
 
-  .hero h1 {
-    font-size: clamp(74px, 24vw, 150px);
-    line-height: 0.78;
+  .hero-focus h1 {
+    display: block;
+    font-size: clamp(70px, 21vw, 150px);
+    line-height: 0.67;
+    white-space: normal;
   }
 
-  .hero__disciplines {
+  .hero-focus h1 span {
+    display: block;
+  }
+
+  .hero-focus h1 span + span {
+    margin-left: 0;
+  }
+
+  .hero-focus__meta {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    margin-top: 25px;
     text-align: center;
   }
 
@@ -782,17 +861,18 @@ dd {
 }
 
 @media (max-width: 520px) {
-  .hero h1 {
-    font-size: 22vw;
+  .hero-matrix__row {
+    font-size: 7.6vw;
+    letter-spacing: -0.075em;
   }
 
-  .hero__eyebrow {
-    font-size: 9px;
+  .hero-focus {
+    width: calc(100% - 28px);
   }
 
-  .hero__disciplines {
+  .hero-focus__eyebrow,
+  .hero-focus__meta {
     font-size: 8px;
-    gap: 9px;
   }
 
   .experience h3,
