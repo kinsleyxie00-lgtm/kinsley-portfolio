@@ -1,182 +1,214 @@
-# Color Hero and Direct Page Transition Design
+# 彩色 Hero 与页面直切设计规格
 
-## Objective
+## 项目目标
 
-Refine the interactive portfolio around the three supplied reference images. The ancient-tree photograph is a warm, full-color entrance. Only its four plants begin desaturated. Hovering or focusing a plant reveals its natural green color with restrained organic motion; clicking immediately enters the corresponding portfolio page.
+以用户提供的三张参考图为唯一视觉基准，继续重构 KINSLEY XIE Portfolio。
 
-Once a visitor enters the content space, the persistent navigation switches directly among About, Experience, Projects, Photography, and Contact. The Hero is not shown again during that visit and there is no back-to-Hero control.
+古树摄影作为全屏入口，并保留原始暖色。只有四株植物在初始状态呈灰白低饱和；鼠标悬停或键盘聚焦时，植物恢复自然绿色并产生克制的生长感。点击植物后立即进入对应内容页面。
 
-## Sources of Truth
+进入内容页面后，顶部导航始终保留。About、Experience、Projects、Photography、Contact 之间直接切换，不再返回 Hero，也不刷新或改变网址。
 
-The implementation follows these local references:
+## 视觉基准
 
-- `/Users/xkx/Desktop/download-1.png` for the four plant locations;
-- `/var/folders/m6/h_8jl2_96w97b_5693cs16580000gn/T/codex-clipboard-66509972-1293-49de-b7bf-61ae646c80b5.png` for interaction, page switching, layout examples, and palette;
-- `/var/folders/m6/h_8jl2_96w97b_5693cs16580000gn/T/codex-clipboard-5950dbf6-ec9b-44fe-b778-a655ce14b8e7.png` for Hero typography, navigation, plant labels, and editorial project composition.
+以下三张本地图片是实现时的判断标准：
 
-StudioFMRG informs transition restraint and editorial pacing. Aesop-inspired natural materiality informs atmosphere only. No brand copy, branded component, or recognizable Aesop page composition is copied.
+- `/Users/xkx/Desktop/download-1.png`：四株植物的位置；
+- `/var/folders/m6/h_8jl2_96w97b_5693cs16580000gn/T/codex-clipboard-66509972-1293-49de-b7bf-61ae646c80b5.png`：交互规则、页面切换、排版示意和配色；
+- `/var/folders/m6/h_8jl2_96w97b_5693cs16580000gn/T/codex-clipboard-5950dbf6-ec9b-44fe-b778-a655ce14b8e7.png`：Hero 字体、植物标签、导航及 Projects 页面构图。
 
-## Scope
+FMRG Studio 只用于参考页面切换的克制节奏和编辑感。Aesop 只用于参考自然材质、暖灰色调和安静氛围，不复制品牌文字、页面结构或标志性设计。
 
-This phase builds:
+## 本阶段范围
 
-1. the revised color Hero interaction;
-2. the non-returning page transition state machine;
-3. the shared editorial exhibition layout framework;
-4. direct persistent navigation among all five content pages.
+本阶段完成：
 
-It preserves the current KSX BrandIntro, existing Kinsley content, React/Next.js/GSAP/Framer Motion architecture, and existing local assets. It does not deploy the site, add images, create routes, or introduce a second homepage or navigation system.
+1. 彩色摄影 Hero 与四株植物 hover 交互；
+2. 进入内容后不可返回 Hero 的页面状态机；
+3. 五个页面共用的展览式编辑排版框架；
+4. 顶部导航在五个页面之间直接切换。
 
-## Hero
+必须保留：
 
-After the KSX BrandIntro finishes, the viewport reveals `/public/images/tree-aquatic-archive-v3.png` in its original warm color photography.
+- 现有 KSX 开屏动画；
+- Kinsley 已有 About、Experience、Projects、Photography、Contact 内容；
+- React、Next.js、GSAP、Framer Motion 架构；
+- 现有本地图片与素材；
+- 本地预览，不部署。
 
-The Hero includes:
+不得新增图片、另建第二套首页或导航，也不创建独立页面路由。
 
-- the KINSLEY XIE wordmark at upper left;
-- the five-item navigation across the top;
-- one short serif statement in the left negative space;
-- restrained plant labels placed near their corresponding specimens;
-- a small practice line such as `Observe / Curate / Create` where space permits.
+## Hero 设计
 
-The photograph remains the dominant element. Typography is small, sparse, and integrated into the architecture rather than presented as a conventional portfolio headline block.
+KSX 开屏播放结束后，显示 `/public/images/tree-aquatic-archive-v3.png`。
 
-Pointer movement creates subtle parallax only. Touch and reduced-motion modes remain static.
+Hero 要求：
 
-## Plant Mapping
+- 古树、树皮、水面、倒影、墙面和苔藓保留原始暖色；
+- 只有四株入口植物呈灰白低饱和；
+- 左上保留小型 KINSLEY XIE 品牌文字；
+- 顶部显示五项极简导航；
+- 左侧留白区域可放一句简短衬线体表达；
+- 植物旁使用克制的小标签标明栏目；
+- 可在角落保留 `Observe / Curate / Create` 等极短辅助文字。
 
-The plant positions remain:
+图片必须是视觉主体。文字不能形成传统作品集的大段介绍，也不能覆盖植物。
 
-| Photograph position | Destination |
+鼠标移动只产生非常轻微的摄影视差；触屏设备和减少动态效果模式保持静态。
+
+## 四株植物入口
+
+四株植物按参考图绑定：
+
+| 图片位置 | 对应页面 |
 | --- | --- |
-| Upper trunk | About |
-| Center-left trunk | Experience |
-| Right branch | Projects |
-| Lower waterline | Photography |
+| 树干顶部 | About |
+| 中央偏左树干 | Experience |
+| 右侧树枝 | Projects |
+| 下方水线 | Photography |
 
-Hotspots are semantic buttons with at least 44 CSS-pixel hit areas. Desktop and mobile coordinates may differ to account for the responsive image crop. The visible label and hit area must remain tied to the same plant.
+热点必须绑定到真实植物位置，不能使用任意屏幕区域。桌面端和移动端可以分别校准坐标。
 
-## Plant Visual State
+每个入口使用语义化按钮，并提供至少 44 像素的可点击区域。键盘与触屏均可操作。
 
-The base tree photograph stays in color. Each plant receives an independent local desaturation treatment at rest. The trunk, water, walls, moss, and reflection are not globally desaturated.
+## 植物初始状态与 Hover
 
-On hover or keyboard focus:
+树木照片整体保持彩色，每株植物单独覆盖局部灰度效果。
 
-1. the plant's grayscale treatment dissolves to reveal source green;
-2. its local reveal expands softly from the growth point;
-3. a small scale and brightness change suggests leaves opening;
-4. the nearby label gains contrast.
+鼠标悬停或键盘聚焦时：
 
-The motion is reversible when hover or focus leaves. No click is required to color the plant. There are no particles, glows, spores, portals, or game-state labels.
+1. 当前植物从灰白恢复为原图绿色；
+2. 绿色从植物生长点自然扩散；
+3. 叶片产生极小幅度的展开、放大和亮度变化；
+4. 植物旁的栏目标签提高对比度。
 
-On touch, the first tap may show the hover state briefly only if required for discoverability; the same tap should still enter the section unless the browser's interaction model prevents it.
+鼠标离开后恢复灰白。这个过程不需要点击，也不保存成长状态。
 
-## Click and Transition
+不得使用粒子、光晕、孢子、发光门户、游戏状态文字或幻想效果。
 
-Clicking a plant immediately begins the page transition. It does not wait for a growth sequence to complete.
+触屏点击应直接进入页面，不额外要求第二次点击。
 
-The Hero exits through a restrained combination of:
+## 点击与转场
 
-- image scale of no more than a few percent;
-- short blur and opacity reduction;
-- a soft editorial wipe or clip reveal for the incoming page.
+点击植物后立即开始页面转场，不等待 hover 动画播放完毕。
 
-The URL, route, and hash remain unchanged. There is no refresh.
+Hero 退出可使用：
 
-## View State
+- 不超过几个百分点的图片缩放；
+- 短暂的模糊和透明度变化；
+- 内容页面从下方或侧面柔和揭示。
 
-The application owns one view state:
+转场必须克制、平滑，不改变 URL、路由或 hash，也不刷新页面。
+
+## 页面状态逻辑
+
+网站只维护一个当前视图：
 
 ```text
 hero | about | experience | projects | photography | contact
 ```
 
-`hero` is available only before the first content entry in the current mounted session. After entry, all navigation actions select one of the five content views. The brand button becomes a non-interactive identity mark or opens About; it does not return to the Hero.
+Hero 只出现在开屏之后、首次进入内容之前。
 
-No back-to-Hero control appears. Escape does not close the current page to the Hero. Project details and photography lightboxes may continue to use Escape to close their own nested modal.
+一旦进入任意内容页面：
 
-Selecting another navigation item while inside a section directly replaces the current section using the shared transition system. The outgoing and incoming content do not expose the Hero between them.
+- 不显示“返回 Hero”；
+- 点击 KINSLEY XIE 品牌文字也不返回 Hero，可保持纯品牌标识或打开 About；
+- Escape 不关闭页面回到 Hero；
+- 点击其他顶部导航，直接切换到对应页面；
+- 切换过程中不能短暂露出 Hero。
 
-## Navigation
+Projects 项目详情和 Photography 灯箱仍可使用 Escape 关闭，但只能返回各自的 Projects 或 Photography 页面。
 
-The persistent navigation contains:
+## 顶部导航
+
+顶部导航固定包含：
 
 ```text
 About / Experience / Projects / Photography / Contact
 ```
 
-It remains visible on the Hero and every content page, with a restrained active underline. Mobile uses the same destinations in a compact menu. Closing the mobile menu does not change the active view.
+Hero 和所有内容页面共用同一个导航组件。
 
-## Editorial Exhibition Framework
+当前页面使用细线或轻微颜色变化表示激活状态。移动端可以收为极简菜单，但不能创建另一套导航逻辑。
 
-All content pages share a structural framework rather than sharing an identical template:
+## 编辑式页面框架
 
-- persistent top navigation;
-- warm off-white or mineral background;
-- small section index and metadata;
-- large serif page title;
-- controlled image proportions using existing assets only;
-- story, process, and results content organized into short editorial blocks;
-- generous whitespace and asymmetrical grids.
+五个页面共用统一视觉语言，但不能看起来像完全相同的模板。
 
-Pages may scroll internally when their content exceeds the viewport. This internal reading flow is not a continuous scrolling homepage.
+共同原则：
+
+- 暖白、暖灰或矿物色背景；
+- 小型栏目编号和辅助信息；
+- 大号衬线标题；
+- 使用现有图片，不新增图片；
+- 图片比例受控，采用不对称编辑网格；
+- 文字分为故事、过程、结果等短段落；
+- 大量留白，避免卡片和普通简历结构。
+
+内容较长时允许当前页面内部纵向阅读，但首页不再把所有栏目连续向下排列。
 
 ### About
 
-Use a quiet two-part composition: concise personal story and one existing portrait/botanical arrangement. Skills and tools appear as light metadata, not résumé cards.
+使用简短个人故事配合现有人像或植物图片。技能和工具作为轻量辅助信息，不做成简历卡片。
 
 ### Experience
 
-Use an indexed editorial timeline. Each role has short story, process/contribution, and result highlights. Avoid a corporate résumé table.
+采用有编号的编辑式经历时间线。每段经历展示背景、个人贡献与结果，避免企业招聘网站式表格。
 
 ### Projects
 
-Use an asymmetrical image-led grid inspired by the supplied project reference. Each project exposes title, story/context, process, and result through the existing nested project detail system.
+参考用户提供的 Projects 构图，用现有素材组成不对称图片网格。每个项目继续提供故事、过程和结果详情。
 
 ### Photography
 
-Use a museum-contact-sheet or exhibition grid with existing photography placeholders/assets. Preserve the lightbox and keyboard navigation.
+采用展览墙或接触印样式网格，使用现有摄影素材或已有占位内容。保留灯箱及键盘左右切换。
 
 ### Contact
 
-Use a minimal correspondence page with a large invitation line, concise availability, email, phone, location, and résumé action.
+使用极简通信页面，包含一句合作邀请、求职方向、邮箱、电话、位置和简历下载。
 
-## Motion
+## 动效原则
 
-Motion uses Framer Motion and GSAP/CSS only where each is already appropriate:
+使用 GSAP、Framer Motion 与 CSS 完成：
 
-- hover desaturation reveal;
-- restrained image parallax;
-- fade, blur, and clip transitions between views;
-- small stagger for headings, metadata, and image groups;
-- smooth internal scrolling without an exaggerated inertia system.
+- 植物 hover 灰白转绿；
+- 非常轻微的图片视差；
+- 页面间淡入、模糊与裁切揭示；
+- 标题、辅助信息和图片的轻微错峰出现；
+- 内容区域平滑滚动。
 
-Reduced-motion mode removes parallax, blur, and stagger and switches views with a near-instant opacity change.
+避免夸张惯性、强烈镜头运动、弹跳、游戏感和持续环境动画。
 
-## Responsive Behavior
+减少动态效果模式下取消视差、模糊和错峰，只保留接近即时的透明度切换。
 
-Desktop follows the supplied wide Hero composition. Mobile uses a dedicated crop and hotspot calibration. If one plant cannot remain visible in a single portrait crop, navigation still guarantees direct access, but the design should prioritize showing as many real plant positions as possible without fabricating new imagery.
+## 响应式
 
-Content grids collapse into deliberate editorial sequences rather than generic stacked cards. Safe areas, 44-pixel controls, keyboard focus, and touch interaction are preserved.
+桌面端以宽幅参考图为主。移动端使用独立图片裁切和热点坐标。
 
-## Failure and Edge Cases
+如果竖屏无法同时展示四株植物，应优先保留尽可能多的真实植物，并保证顶部导航始终能够进入全部页面，不允许通过新增或伪造图片解决。
 
-- Failure to apply a local plant mask leaves that plant desaturated but does not block its button.
-- Rapid navigation selects only the latest requested view and cannot produce overlapping pages.
-- KSX BrandIntro always resolves to the Hero, never directly to a content page.
-- A nested project detail or photography lightbox closes back to its parent section, not to the Hero.
-- Session storage is not required for plant state because hover is transient and the Hero is not revisited.
+内容网格在移动端应转换为有节奏的编辑序列，而不是普通卡片纵向堆叠。所有按钮必须满足触屏尺寸和安全区要求。
 
-## Validation
+## 异常与边界情况
 
-- Compare Hero color, typography, labels, and spacing with all three supplied images.
-- Verify the tree, water, architecture, and reflection remain in original color.
-- Verify only the four plant regions appear desaturated at rest.
-- Verify hover/focus reveals green and organic motion without click.
-- Verify each plant click immediately opens its mapped page.
-- Verify no content page exposes a return-to-Hero control.
-- Verify navigation switches directly between all five pages with no Hero flash, URL change, or refresh.
-- Verify About, Experience, Projects, Photography, and Contact use the shared editorial framework and existing assets only.
-- Verify nested project and photography dialogs still function.
-- Verify desktop, mobile, keyboard, touch, and reduced-motion behavior.
-- Run the production build and retain local preview only.
+- 局部植物灰度遮罩失败时，入口按钮仍可正常点击；
+- 快速连续点击导航时，只展示最后选择的页面，不能重叠多个页面；
+- KSX 开屏结束后始终先显示 Hero；
+- 项目详情和摄影灯箱关闭后返回其父页面，而非 Hero；
+- 植物 hover 是临时状态，不再需要 sessionStorage。
+
+## 验收标准
+
+- Hero 的色调、文字、植物标签和留白与三张参考图一致；
+- 树干、水面、空间与倒影保持原始彩色；
+- 只有四株植物初始灰白；
+- hover 或键盘聚焦时植物恢复绿色并产生克制生长感；
+- 点击植物立即打开正确页面；
+- 内容页面没有返回 Hero 的按钮；
+- 五个栏目可通过顶部导航直接切换；
+- 切换时不闪现 Hero，不刷新，不改变 URL；
+- 五个栏目使用统一编辑框架和现有素材；
+- 项目详情和摄影灯箱继续正常工作；
+- 桌面端、移动端、键盘、触屏和减少动态效果模式均可使用；
+- `pnpm build` 通过；
+- 仅保留本地预览，不部署。
