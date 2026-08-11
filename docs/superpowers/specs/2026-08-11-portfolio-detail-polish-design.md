@@ -1,49 +1,49 @@
-# Portfolio Detail Polish Design
+# Portfolio 细节优化设计规格
 
-## Scope
+## 修改范围
 
-This pass changes only four approved details in the existing portfolio. It does not redesign the Hero, page layouts, navigation structure, project content, or contact section.
+本轮仅修改四项已经确认的细节，不重新设计 Hero、页面排版、导航结构、项目内容或 Contact 区域。
 
-## 1. About signature
+## 1. About 手写签名
 
-- Keep the existing `public/images/kinsley-signature.png` asset.
-- Show the complete signature in the About navigation brand without cropping or stretching.
-- Use a slightly wider responsive container and `object-fit: contain`; preserve the current restrained scale on desktop and mobile.
+- 继续使用现有素材 `public/images/kinsley-signature.png`。
+- About 页顶部导航中的签名必须完整显示，不裁切、不拉伸。
+- 使用稍宽的响应式容器和 `object-fit: contain`，在桌面端与移动端保持当前克制的视觉比例。
 
-## 2. Navigation surface while scrolling
+## 2. 滚动时的导航质感
 
-- Remove the visible bottom border from the content navigation.
-- At the top of a page, retain the current clean warm-white surface.
-- Once the active inner-page scroller moves beyond a small threshold, add a scroll-state class to the navigation.
-- In that state, use a translucent warm-white background, subtle backdrop blur/saturation, and a very soft shadow. The effect must remain light enough that body text passing below stays legible.
-- Respect `prefers-reduced-motion` and avoid layout shifts.
+- 移除内页顶部导航底部明显的边界线。
+- 页面位于顶部时，保持当前干净的暖白背景。
+- 内页滚动容器超过一个较小阈值后，为导航增加滚动状态。
+- 滚动状态使用半透明暖白背景、轻微背景模糊与饱和度调整，并加入非常柔和的阴影；正文从导航下方经过时仍须清晰可读。
+- 尊重 `prefers-reduced-motion` 设置，并避免导航产生布局跳动。
 
-## 3. Postcard close control
+## 3. 明信片关闭按钮
 
-- Keep the existing postcard dialog, previous/next controls, backdrop, and layout.
-- Make the close control visibly distinct at the top-right of the modal at all supported breakpoints.
-- Use a high-contrast circular surface and a clear `×` glyph with a minimum 44px target.
-- Preserve existing Escape-key closing, focus transfer into the dialog, focus trapping, and focus restoration.
-- Clicking the backdrop may also close the dialog, while clicks inside the postcard must not.
+- 保留现有明信片弹层、前后切换按钮、遮罩和排版。
+- 在所有支持的屏幕尺寸下，弹层右上角都要显示清晰、醒目的关闭按钮。
+- 关闭按钮采用高对比度圆形底和明确的 `×` 符号，可点击区域至少为 44px。
+- 保留现有的 `Esc` 关闭、打开后焦点进入弹层、焦点限制在弹层内，以及关闭后焦点返回触发按钮等行为。
+- 点击弹层背景遮罩也可以关闭；点击明信片本体不会误关闭。
 
-## 4. Eight photographs
+## 4. Photography 仅保留八张照片
 
-- Photography contains only items 01 through 08; remove 09 and 10 from the data source.
-- Derive all visible totals and ranges from `photography.length`, producing `01 / 08`, `02—08`, and postcard counts ending in `/ 08`.
-- Previous/next navigation and ArrowLeft/ArrowRight wrapping use the eight-item collection.
-- Preserve the existing irregular archive composition for items 01 through 08.
+- Photography 只保留 01—08，移除数据源中的 09 和 10。
+- 所有数量与区间从 `photography.length` 自动生成，界面显示为 `01 / 08`、`02—08`，明信片页码以 `/ 08` 结尾。
+- 前后切换以及键盘方向键循环均基于八张照片。
+- 保留 01—08 现有的不规则 Archive 构图。
 
-## Responsive and accessibility checks
+## 响应式与无障碍检查
 
-- Verify desktop at 1440px and mobile at 390px.
-- Confirm the signature is complete, navigation remains readable while scrolling, and the close button is visible and keyboard operable.
-- Confirm exactly eight photography entries are reachable and all displayed totals match.
-- Run the production build and inspect the browser console for errors.
+- 分别在 1440px 桌面端和 390px 移动端检查。
+- 确认签名完整，导航滚动时文字仍清晰，关闭按钮始终可见且支持键盘操作。
+- 确认只有八张照片可以打开，所有数量显示一致。
+- 运行生产构建，并检查浏览器控制台无报错。
 
-## Non-goals
+## 不在本轮范围内
 
-- No deployment.
-- No new homepage or navigation.
-- No changes to resume-derived experience or project facts.
-- No restoration of procedural tree roots.
-- No unrelated refactoring or cleanup of the existing dirty worktree.
+- 不部署。
+- 不新建首页或导航。
+- 不修改任何源自简历的经历或项目事实。
+- 不恢复程序化树根。
+- 不重构或清理与本轮需求无关的现有工作区修改。
