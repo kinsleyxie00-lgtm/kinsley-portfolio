@@ -1,173 +1,171 @@
-# FMRG-style full-page scroll design
+# FMRG 式全屏滚动设计规格
 
-Date: 2026-08-13  
-Status: approved interaction direction, pending written-spec review
+日期：2026-08-13  
+状态：交互方向已确认，等待中文版规格审核
 
-## Goal
+## 目标
 
-Bring the scroll rhythm observed on [StudioFMRG](https://fmrg.studio/) into the four portfolio inner pages without redesigning their approved content or layout. The result should feel editorial and restrained: native scrolling, full-viewport pauses, gradual reveals, and the next section covering the previous one.
+将 [StudioFMRG](https://fmrg.studio/) 的滚动节奏移植到作品集四个内页，同时保留已经确认的内容与排版。最终体验应克制、编辑化：原生滚动、全屏停留、渐进显影，以及下一章节从底部覆盖上一章节。
 
-Hero, persistent navigation, cursor labels, mouse attraction, dialogs, and existing content decisions remain intact.
+Hero、常驻导航、鼠标文字标签、轻微吸附、弹层及现有内容决策全部保留。
 
-## Reference findings
+## 参考站观察结果
 
-The reference uses normal document scrolling rather than wheel hijacking. Its defining behavior is:
+FMRG 使用正常页面滚动，没有劫持滚轮。核心行为包括：
 
-- a fixed navigation layer;
-- viewport-height sticky scenes;
-- text revealed progressively while a scene is held;
-- following scenes rising from below and covering earlier scenes;
-- stacked full-screen case sections;
-- reduced use of scaling, bounce, or decorative parallax.
+- 导航固定；
+- 以视口高度为单位的 `sticky` 场景；
+- 场景停留期间文字随滚动逐步显现；
+- 下一场景从底部升起并覆盖上一场景；
+- 案例内容形成全屏叠层；
+- 几乎不使用缩放、弹跳或装饰性视差。
 
-The portfolio will reproduce this interaction logic, not FMRG's branding, copy, imagery, colours, or exact composition.
+本项目只复刻这套交互逻辑，不复制 FMRG 的品牌、文案、图片、颜色或具体构图。
 
-## Chosen implementation
+## 已选实现方案
 
-Use native `position: sticky` plus one page-scoped scroll-progress controller. Do not use scroll snapping, wheel interception, GSAP, or a replacement smooth-scroll engine.
+采用原生 `position: sticky` 加一个页面级滚动进度控制器。不使用滚动吸附、滚轮拦截、GSAP 或第三方顺滑滚动引擎。
 
-The controller:
+控制器职责：
 
-- listens to the existing `.portfolio-overlay__content` scroller;
-- updates at most once per animation frame;
-- measures only registered scroll scenes;
-- writes normalized progress and active-state CSS variables/attributes;
-- leaves layout, sticky positioning, reveal curves, and layering to CSS;
-- refreshes measurements on page change and resize;
-- removes listeners and inline variables when the active inner page changes.
+- 监听现有 `.portfolio-overlay__content` 滚动容器；
+- 每个动画帧最多更新一次；
+- 只测量已登记的滚动场景；
+- 写入标准化进度和激活状态 CSS 变量/属性；
+- 布局、固定位置、显影曲线与层级全部由 CSS 负责；
+- 切换页面或改变窗口尺寸时刷新测量；
+- 页面切换时移除监听和行内变量。
 
-This controller is independent of `ArchiveCursor`: scroll motion must not overwrite `transform` on `[data-attract]` elements. Scene-level wrappers receive scroll transforms; attraction remains on their inner text, image, or plant targets.
+滚动控制器与 `ArchiveCursor` 相互独立。滚动位移只作用于场景外层，鼠标吸附继续作用于内层文字、图片或植物，避免同时覆盖同一个 `transform`。
 
-## Shared scroll language
+## 通用滚动语言
 
-### Desktop / fine pointer
+### 桌面端／精细指针设备
 
-- Navigation stays fixed above every scene.
-- A standard scene occupies about `150–190svh`; its inner panel is sticky for one viewport below the navigation.
-- Entry: opacity `0.2 → 1`, vertical movement no more than `24px`.
-- Hold: the primary composition remains still long enough to read.
-- Exit: opacity may soften to no less than `0.72`; upward movement no more than `18px`.
-- The next scene rises over the earlier scene with an opaque warm-white surface and incremented `z-index`.
-- No zoom, elastic easing, rotation, blur, dark overlay, or hard scroll snapping.
-- Short separators and existing rules may fade; no new decorative UI is added.
+- 导航始终固定在场景上方。
+- 普通场景轨道约为 `150–190svh`，内部面板在导航下方固定约一个视口。
+- 进入：透明度从 `0.2` 到 `1`，垂直位移不超过 `24px`。
+- 停留：主体构图保持稳定，留出完整阅读时间。
+- 离场：透明度最低不低于 `0.72`，上移不超过 `18px`。
+- 下一场景使用不透明暖白底并提高 `z-index`，从底部覆盖上一场景。
+- 不添加缩放、弹性缓动、旋转、模糊、暗色遮罩或硬性滚动吸附。
+- 现有分隔线可随进度淡入，不增加装饰性 UI。
 
-### Mobile / touch
+### 手机／触屏设备
 
-Use short sticky pauses plus natural flow:
+采用短黏性停留＋自然滚动：
 
-- scene tracks are shorter, about `115–130svh`;
-- long text is never clipped or forced into a viewport;
-- content can continue below the sticky composition naturally;
-- Xiaohongshu horizontal scroll-snap remains operational;
-- Photography archive and postcard controls retain normal touch behavior;
-- no pointer-specific progress effects are required.
+- 场景轨道缩短至约 `115–130svh`；
+- 长正文不能被裁切或强制塞入一屏；
+- 超出固定构图的内容继续自然向下流动；
+- 小红书视频横向滚动吸附保持可用；
+- Photography Archive 与明信片触控操作保持正常；
+- 不要求触屏设备运行指针相关效果。
 
-### Reduced motion
+### 减少动态效果
 
-For `prefers-reduced-motion: reduce`, coarse low-capability layouts, or unsupported sticky behavior:
+当系统开启 `prefers-reduced-motion: reduce`、设备能力较弱或不支持可靠的 `sticky` 时：
 
-- remove sticky scene tracks and progress transforms;
-- render all sections in their current natural document order;
-- retain content, focus order, links, buttons, and dialogs.
+- 取消黏性场景和进度位移；
+- 所有内容恢复当前自然文档顺序；
+- 内容、焦点顺序、链接、按钮与弹层保持完整。
 
-## Page mapping
+## 四页滚动映射
 
 ### About
 
-One approximately `150svh` track holds the current portrait-and-copy composition.
+当前人像与文案构图放入约 `150svh` 的单场景轨道：
 
-1. Portrait settles first.
-2. Handwritten `about me` and the copy reveal shortly after.
-3. The composition moves upward slightly near the end.
-4. Contact rises naturally from below and covers the About surface.
+1. 人像先稳定显现；
+2. 手写 `about me` 和正文随后进入；
+3. 场景末端整体轻微上移；
+4. Contact 从下方自然升起并覆盖 About 暖白底。
 
-No new copy, biography, or educational information is introduced.
+不新增个人介绍、教育信息或事实内容。
 
 ### Experience
 
-The existing intro becomes the opening sticky scene. The three horizontal experience rows then build into one full-screen index:
+现有标题区成为开场固定场景，三条横向经历随后逐层完成索引：
 
-1. The intro establishes the page.
-2. NIO enters first from below.
-3. DEWU enters second while NIO remains visible.
-4. Xinhua Daily enters last, completing the index.
+1. 标题区先建立页面；
+2. 蔚来从底部进入；
+3. 得物进入时蔚来仍保留在画面中；
+4. 新华日报最后进入，完成三条横向索引。
 
-Rows do not become a timeline or card grid. Their current facts, order, hover preview, and horizontal construction remain unchanged.
+经历不改成 timeline 或 card grid。现有事实、顺序、悬停预览和横向结构不变。
 
 ### Projects
 
-Projects becomes four consecutive full-screen layers:
+Projects 形成四个连续全屏层：
 
-1. `Selected work` intro.
-2. Xiaohongshu personal-account feature with exactly three 3:4 video visuals and separate caption areas.
-3. `In the Act of Becoming` with one unchanged 4:3 film frame.
-4. `firefly Big Day` case entry.
+1. `Selected work` 开场；
+2. 小红书个人账号重点展示：三个 3:4 视频画面＋独立文案框；
+3. `In the Act of Becoming`：一支 4:3 MV；
+4. `firefly Big Day` 案例入口。
 
-Each new layer rises from below and covers the preceding warm-white layer. Existing video focus behavior remains one-large/two-small with an unchanged 3:4 ratio and common lower baseline. The MV does not scale, darken, or gain an overlay. Project dialogs remain outside the scroll-progress system.
+每一层从底部升起，覆盖前一层暖白页面。小红书继续保持一大两小、3:4 比例不变、底部对齐。MV 不放大、不变暗、不增加遮罩。项目详情弹层不参与滚动进度。
 
 ### Photography
 
-Photography uses three scenes:
+Photography 分为三个场景：
 
-1. Editorial Landing holds while the feature image and opening copy settle.
-2. The selected preview spread enters progressively as one scene.
-3. `Photo archive` rises as the covering layer and then continues in natural document flow.
+1. Editorial Landing 固定，主图与开场文字依次稳定；
+2. 预览图组作为一个场景渐进进入；
+3. `Photo archive` 从下方覆盖，并在之后恢复自然长页面滚动。
 
-The collection remains exactly eight photographs. Opening a postcard freezes the page scroller as it does now; the modal, close button, previous/next buttons, and focus trap do not participate in scene progress.
+摄影数量保持八张。打开明信片后继续冻结页面滚动；弹层、关闭按钮、前后切换与焦点循环都不参与场景进度。
 
 ### Contact
 
-The shared compact dark Contact is not sticky. It enters through normal document flow and visually covers the final light scene. Contact content and links do not receive attraction or scroll-progress transforms.
+四页共用的紧凑深色 Contact 不做黏性固定，通过正常文档流进入并覆盖最后一个浅色场景。Contact 内容和链接不应用鼠标吸附或滚动位移。
 
-## Component boundaries
+## 组件边界
 
-Add one small client component/hook responsible only for scene progress, for example `ScrollSceneController`. Pages declare semantic scene wrappers and stable `data-scroll-scene` attributes. Page-specific CSS controls track height, sticky panels, reveal order, and stacking.
+新增一个职责单一的客户端组件或 Hook，例如 `ScrollSceneController`，只负责计算场景进度。各页面通过语义化外层和稳定的 `data-scroll-scene` 属性登记场景，页面专属 CSS 负责轨道高度、黏性面板、显影顺序与层级。
 
-Expected touched surfaces:
+预计修改范围：
 
-- `components/PortfolioOverlay.tsx`: provides the active scroller boundary;
-- `components/About.tsx`;
-- `components/Experience.tsx`;
-- `components/Projects.tsx`;
-- `components/Photography.tsx`;
-- one new focused scroll-controller component or hook;
-- `app/globals.css`.
+- `components/PortfolioOverlay.tsx`：提供当前内页滚动容器；
+- `components/About.tsx`；
+- `components/Experience.tsx`；
+- `components/Projects.tsx`；
+- `components/Photography.tsx`；
+- 一个新的滚动控制器组件或 Hook；
+- `app/globals.css`。
 
-Do not change Hero, create a new homepage or navigation, restore procedural roots, replace the current router-like page switching, or add a third-party animation dependency.
+不修改 Hero，不新建首页或导航，不恢复程序化树根，不替换当前无刷新内页切换，也不增加第三方动画依赖。
 
-## Interaction and accessibility
+## 交互与无障碍
 
-- Native wheel, trackpad, scrollbar, keyboard, and touch scrolling remain available.
-- DOM order and visual reading order stay aligned.
-- Sticky wrappers do not trap focus.
-- When focus moves into an offscreen control, the browser must be able to scroll it into view.
-- Existing `VIEW / OPEN / CLOSE / SELECT` labels and native cursor remain.
-- Attraction displacement stays independent and restrained.
-- Dialog opening suspends or ignores scene updates until the dialog closes.
+- 原生滚轮、触控板、滚动条、键盘和触屏滚动全部保留。
+- DOM 顺序与视觉阅读顺序一致。
+- 黏性外层不得锁住键盘焦点。
+- 焦点进入屏外控件时，浏览器仍能将其滚动到可见区域。
+- 保留原生鼠标及 `VIEW / OPEN / CLOSE / SELECT` 标签。
+- 轻微鼠标吸附保持独立、克制。
+- 打开弹层后暂停或忽略场景更新，关闭后恢复。
 
-## Performance
+## 性能要求
 
-- One passive scroll listener on the active inner-page scroller.
-- One `requestAnimationFrame` write cycle.
-- Cache scene references; do not query the full DOM every frame.
-- Prefer opacity and transform on scene wrappers; avoid layout properties during scroll.
-- Use `ResizeObserver` or a resize refresh only for measurement invalidation.
-- Do not keep `will-change` on every scene permanently.
+- 当前内页滚动容器只使用一个被动滚动监听器；
+- 只使用一个 `requestAnimationFrame` 写入循环；
+- 缓存场景引用，不在每帧查询整个 DOM；
+- 优先使用透明度与场景外层 `transform`，滚动时不修改布局属性；
+- 仅在尺寸变化或 `ResizeObserver` 通知时重新测量；
+- 不为所有场景永久开启 `will-change`。
 
-## Validation
+## 本地验收
 
-Validate locally only at desktop and mobile widths:
+- 四页内容和顺序保持已确认版本；
+- 桌面端场景停留、显影和覆盖无跳动、无空白死区；
+- 手机端文字完整且能自然滚动；
+- 小红书卡片默认与放大状态均保持 3:4；
+- MV 保持 4:3，不缩放、不变暗；
+- Photography 保持八张，明信片关闭按钮清晰可用；
+- Contact 与四页末尾衔接自然；
+- 鼠标吸附和文字标签仍正常；
+- 键盘焦点与弹层可跨场景正常工作；
+- 减少动态效果时恢复自然滚动；
+- `pnpm run build` 通过。
 
-- all four pages retain their approved content and order;
-- desktop scenes hold and cover without scroll jumps or dead zones;
-- mobile content remains readable and naturally scrollable;
-- Xiaohongshu cards stay 3:4 before and during focus;
-- MV remains 4:3 and does not scale or darken;
-- Photography shows eight items and its postcard close control remains visible;
-- Contact follows each page cleanly;
-- mouse attraction and cursor labels remain functional;
-- keyboard focus and dialogs work through scene boundaries;
-- reduced motion returns to natural document flow;
-- `pnpm run build` passes.
-
-No deployment is included.
+仅本地预览，不部署。
