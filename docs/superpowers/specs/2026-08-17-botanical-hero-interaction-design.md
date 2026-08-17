@@ -86,23 +86,17 @@ The shader outputs only the selected plant pixels and leaves all other pixels tr
 
 Acceptance requires visual inspection at the actual desktop crop: no black edge, black circle, rectangular mask boundary, glow, or visible color spill onto bark/background.
 
-## Water ripple
+## Continuous water refraction
 
 The water effect uses the same transparent WebGL layer and the same source image texture, while the HTML background image remains visible underneath. The effect surface follows the background image's `object-fit: cover` crop and the Hero's existing parallax so the sampled reflection stays aligned.
 
-The water region is bounded by an irregular waterline mask that follows the photograph. It includes the shallow water and lower reflection but excludes the real trunk and all UI. Pointer input outside this region creates no ripple.
+The water region is bounded by an irregular grayscale `water-mask` that follows the photograph's waterline and foreground reflection. It excludes the real trunk, exposed stones, wall, and all UI. A companion occlusion/depth weight softens refraction around trunk intersections and the irregular shoreline. Pointer input outside this region does not enhance the motion.
 
-On pointer entry, create one ripple immediately. Continued movement creates a new ripple only after both a distance and time threshold are met:
+At rest, the water is always moving very subtly. The shader combines three slow horizontal wave bands with different wavelengths, speeds, and phases so the motion does not visibly loop or collapse into one uniform stripe. Refraction is primarily horizontal with only a very weak vertical component. Default displacement remains approximately 0.6–1.4px at common desktop sizes.
 
-- three visible rings per ripple;
-- 160–220px maximum radius at common desktop sizes;
-- 1.6–2.0 second lifetime;
-- approximately 3–5px peak refraction displacement;
-- approximately 18–24% peak light/dark wave contrast;
-- new ripple interval of roughly 280–360ms while moving;
-- maximum of three concurrently active ripple groups.
+When a fine-pointer device enters the masked water region, a broad soft elliptical influence follows the pointer and locally increases the existing wave amplitude. The enhanced area reaches approximately 2–4px peak displacement without generating rings or discrete splashes. Pointer influence eases in immediately and decays back to the resting motion over approximately 700–1000ms after leaving the water. Movement changes the local phase gently; it must not spawn repeated wave objects.
 
-The fragment shader radially displaces the sampled water texture and adds a fine warm-gray crest with a weaker cool-gray inner shadow. The effect must be clearly noticeable as soon as the pointer enters the water, but remain photographic: no blue tint, glow, neon, rapid firing, or game-like rings.
+The effect remains photographic and continuous: no radial circles, crest outlines, blue tint, glow, neon, rapid firing, or game-like ripple graphics. Under `prefers-reduced-motion`, disable both ambient and pointer-driven refraction and retain the unchanged source image.
 
 The canvas has `pointer-events: none`; navigation and plant hotspots remain fully interactive above it.
 
@@ -114,12 +108,12 @@ Prevent duplicate transitions while the handoff is pending. Under `prefers-reduc
 
 ## Responsive and fallback behavior
 
-- Desktop and fine-pointer devices receive the full plant-hover and water-refraction experience.
+- Desktop and fine-pointer devices receive the full plant-hover and continuous water-refraction experience.
 - The four text navigation items remain available at every breakpoint and are the canonical touch fallback.
-- Touch and coarse-pointer devices do not create cursor-following ripples or hover-only states.
+- Touch and coarse-pointer devices retain the static water image and do not create pointer-following refraction or hover-only states.
 - On narrow screens, preserve the current photographic crop unless a small positioning adjustment is needed for readability; do not replace the image or force all four spatially separated plants into one portrait crop.
 - If WebGL initialization or texture loading fails, keep the unchanged base image and fully functional four-item text navigation. Plants remain clickable through the existing hotspots, without the shader treatment.
-- `prefers-reduced-motion` disables the discovery cue, plant scale animation, and ripple animation while preserving navigation and click behavior.
+- `prefers-reduced-motion` disables the discovery cue, plant scale animation, and continuous water refraction while preserving navigation and click behavior.
 
 ## Implementation boundaries
 
@@ -137,8 +131,8 @@ Prevent duplicate transitions while the handoff is pending. Under `prefers-reduc
 4. Navigation-to-plant and plant-to-navigation hover/focus linkage is correct.
 5. Plant activation is limited to leaf pixels with no bark/background contamination.
 6. Click color transition completes before the existing page handoff on normal-motion devices.
-7. Ripples appear only in the water region, show three readable rings, distort the reflection, and never affect the real trunk or UI.
-8. At most three ripple groups exist concurrently and sustained pointer movement remains smooth.
+7. Ambient refraction remains continuous, subtle, and limited to the masked water region; it never affects the real trunk, exposed stones, wall, or UI.
+8. Fine-pointer movement locally strengthens the horizontal refraction without producing radial rings, discrete splashes, or persistent trails, and sustained movement remains smooth.
 9. Keyboard focus makes every navigation item understandable and operable.
 10. Touch, reduced-motion, and WebGL-failure fallbacks retain complete navigation.
 11. Desktop and mobile layouts are visually inspected in the local preview.
