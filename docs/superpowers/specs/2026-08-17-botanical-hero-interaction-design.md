@@ -60,31 +60,19 @@ Hovering or focusing a plant performs the inverse linkage: its matching navigati
 
 Each of the four existing leaf clusters remains a clickable target. Visible plant markers consist only of a tiny 3–4px anchor dot and the matching two-digit number. The full page title is never repeated beside the plant.
 
-The first desktop Hero visit runs one restrained, non-looping discovery cue lasting no more than two seconds: the four plants wake in sequence with a tiny anchor fade, approximately 2% growth, and a mild lift in brightness, then return to rest. The cue never repeats during the same mounted Hero session and is disabled for reduced motion.
+The first desktop Hero visit runs one restrained, non-looping discovery cue lasting no more than two seconds: the four anchor markers wake in sequence and then return to rest. The cue never repeats during the same mounted Hero session and is disabled for reduced motion.
 
 Invisible pointer hotspots extend 20–30px beyond each leaf cluster so the interaction does not require pixel-perfect pointing. Entering a hotspot immediately:
 
-- grows the corresponding plant by 2–4%;
-- lifts its brightness slightly;
-- changes it from high-contrast warm silver gray to the original olive-green photograph;
 - reveals its tiny anchor marker;
 - activates the matching left navigation item;
 - retains the normal pointer cursor without a floating `VIEW 01`–`VIEW 04` label or white rectangular cursor plate.
 
-Default plants use a high-contrast warm silver gray that is immediately distinct from the source olive green. The treatment removes nearly all leaf saturation and lifts the midtones strongly while preserving veins, highlights, shadows, and dimensional detail; leaves must not collapse into flat white silhouettes. The approved color reference is the middle panel labelled `HIGH-CONTRAST SILVER GRAY` in the comparison preview generated on 2026-08-17. Active plants do not receive an artificial tint or saturation boost: the gray cover fades away to reveal the unchanged olive-green pixels in the source photograph. Yellow-green, fluorescent green, neon color, black outlines, rings, rectangular plates, and halos are forbidden.
+All four plants always retain the unchanged color, luminance, texture, and geometry of the source photograph. Hover, focus, discovery, and click states do not recolor, mask, brighten, scale, or otherwise process plant pixels.
 
-## Plant isolation
+## Plant rendering
 
-The current radial CSS masks are not sufficiently precise and must be removed.
-
-Use a transparent WebGL effect layer that samples the unchanged Hero photograph. For each plant, combine:
-
-1. a tight spatial region around the known cluster; and
-2. a smooth chroma/luminance selection tuned to the leaf pixels inside that region.
-
-The shader outputs only the selected plant pixels and leaves all other pixels transparent. Smooth thresholds preserve antialiased leaf edges. The spatial and chroma tests must exclude trunk, water, wall, moss outside the plant, and UI. The active tint and scale are applied only to this isolated output.
-
-Acceptance requires visual inspection at the actual desktop crop: no black edge, black circle, rectangular mask boundary, glow, or visible color spill onto bark/background.
+The WebGL effect layer does not load or sample plant masks. Existing plant mask experiments remain unused and may be removed during final asset cleanup. The DOM background image is the only rendered source for plant pixels.
 
 ## Continuous water refraction
 
@@ -102,18 +90,18 @@ The canvas has `pointer-events: none`; navigation and plant hotspots remain full
 
 ## Click transition
 
-Clicking a plant or navigation item locks that item as active, fades away its warm silver-gray cover to reveal the original plant color over 500–700ms, and then calls the existing `onEnter(view)` callback. Use approximately 620ms as the default handoff delay.
+Clicking a plant or navigation item locks that item as active and then calls the existing `onEnter(view)` callback after approximately 620ms. Plant pixels remain unchanged during the handoff.
 
 Prevent duplicate transitions while the handoff is pending. Under `prefers-reduced-motion`, skip the delay and open the existing view immediately.
 
 ## Responsive and fallback behavior
 
-- Desktop and fine-pointer devices receive the full plant-hover and continuous water-refraction experience.
+- Desktop and fine-pointer devices receive plant/navigation linkage and continuous water refraction.
 - The four text navigation items remain available at every breakpoint and are the canonical touch fallback.
 - Touch and coarse-pointer devices retain the static water image and do not create pointer-following refraction or hover-only states.
 - On narrow screens, preserve the current photographic crop unless a small positioning adjustment is needed for readability; do not replace the image or force all four spatially separated plants into one portrait crop.
-- If WebGL initialization or texture loading fails, keep the unchanged base image and fully functional four-item text navigation. Plants remain clickable through the existing hotspots, without the shader treatment.
-- `prefers-reduced-motion` disables the discovery cue, plant scale animation, and continuous water refraction while preserving navigation and click behavior.
+- If WebGL initialization or texture loading fails, keep the unchanged base image and fully functional four-item text navigation. Plants remain clickable through the existing hotspots.
+- `prefers-reduced-motion` disables the discovery cue and continuous water refraction while preserving navigation and click behavior.
 
 ## Implementation boundaries
 
@@ -129,8 +117,8 @@ Prevent duplicate transitions while the handoff is pending. Under `prefers-reduc
 2. The original background image, top navigation, routes, and all inner pages are unchanged.
 3. All four text navigation items open the correct existing view.
 4. Navigation-to-plant and plant-to-navigation hover/focus linkage is correct.
-5. Plant activation is limited to leaf pixels with no bark/background contamination.
-6. Click color transition completes before the existing page handoff on normal-motion devices.
+5. Plant pixels remain identical to the source photograph in default, hover, focus, discovery, and click states.
+6. The existing page handoff occurs after approximately 620ms on normal-motion devices.
 7. Ambient refraction remains continuous, subtle, and limited to the masked water region; it never affects the real trunk, exposed stones, wall, or UI.
 8. Fine-pointer movement locally strengthens the horizontal refraction without producing radial rings, discrete splashes, or persistent trails, and sustained movement remains smooth.
 9. Keyboard focus makes every navigation item understandable and operable.
