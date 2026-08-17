@@ -66,12 +66,12 @@ Invisible pointer hotspots extend 20–30px beyond each leaf cluster so the inte
 
 - grows the corresponding plant by 2–4%;
 - lifts its brightness slightly;
-- changes it from low-saturation gray-green to cool deep botanical green;
+- changes it from high-contrast warm silver gray to the original olive-green photograph;
 - reveals its tiny anchor marker;
 - activates the matching left navigation item;
-- changes the existing cursor label to `VIEW 01`, `VIEW 02`, `VIEW 03`, or `VIEW 04`.
+- retains the normal pointer cursor without a floating `VIEW 01`–`VIEW 04` label or white rectangular cursor plate.
 
-Default plants remain natural gray-green, never pure monochrome. Active plants use a cool, deep, Aesop-like botanical green. Yellow-green, fluorescent green, neon color, black outlines, rings, rectangular plates, and halos are forbidden.
+Default plants use a high-contrast warm silver gray that is immediately distinct from the source olive green. The treatment removes nearly all leaf saturation and lifts the midtones strongly while preserving veins, highlights, shadows, and dimensional detail; leaves must not collapse into flat white silhouettes. The approved color reference is the middle panel labelled `HIGH-CONTRAST SILVER GRAY` in the comparison preview generated on 2026-08-17. Active plants do not receive an artificial tint or saturation boost: the gray cover fades away to reveal the unchanged olive-green pixels in the source photograph. Yellow-green, fluorescent green, neon color, black outlines, rings, rectangular plates, and halos are forbidden.
 
 ## Plant isolation
 
@@ -108,7 +108,7 @@ The canvas has `pointer-events: none`; navigation and plant hotspots remain full
 
 ## Click transition
 
-Clicking a plant or navigation item locks that item as active, ramps the selected plant to its cool deep green state over 500–700ms, and then calls the existing `onEnter(view)` callback. Use approximately 620ms as the default handoff delay.
+Clicking a plant or navigation item locks that item as active, fades away its warm silver-gray cover to reveal the original plant color over 500–700ms, and then calls the existing `onEnter(view)` callback. Use approximately 620ms as the default handoff delay.
 
 Prevent duplicate transitions while the handoff is pending. Under `prefers-reduced-motion`, skip the delay and open the existing view immediately.
 
@@ -142,4 +142,3 @@ Prevent duplicate transitions while the handoff is pending. Under `prefers-reduc
 9. Keyboard focus makes every navigation item understandable and operable.
 10. Touch, reduced-motion, and WebGL-failure fallbacks retain complete navigation.
 11. Desktop and mobile layouts are visually inspected in the local preview.
-
