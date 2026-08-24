@@ -1,42 +1,43 @@
-# About Body TextType Design
+# About 正文 TextType 动画设计
 
-## Goal
+## 目标
 
-Apply a restrained React Bits TextType interaction to the two Chinese body paragraphs on the About page. The animation should add a deliberate authored feeling without reducing readability or changing the page's editorial layout.
+将克制的 React Bits TextType 打字效果应用于 About 页的两段中文正文。动画需要增强文字被逐步书写的感受，同时保持作品集页面的可读性和现有编辑式布局。
 
-## Scope
+## 范围
 
-- Animate only the two existing About body paragraphs.
-- Preserve the handwritten `about me` title, portrait, résumé link, navigation, scroll reveal, and all other pages.
-- Reuse the existing GSAP dependency. Deployment remains out of scope.
+- 仅为 About 页现有的两段正文添加动画。
+- 保留手写 `about me` 标题、人像、简历下载链接、导航、滚动揭示和其他所有页面。
+- 复用项目现有的 GSAP 依赖。
+- 本次不包含部署。
 
-## Behavior
+## 动画行为
 
-- Start when the body copy becomes visible in the About overlay.
-- Type the first paragraph once using a subtle variable cadence of approximately 32–48ms per character.
-- Pause for approximately 350ms after the first paragraph, then type the second paragraph.
-- Do not delete or loop. Completed text remains visible.
-- Display a fine vertical cursor while typing. Hide it after the second paragraph completes.
-- Reserve the final text height before animation begins so the résumé link and surrounding layout do not jump.
+- 正文进入 About 浮层的可视区域后开始输入。
+- 第一段只输入一次，每个字符使用约 32–48ms 的轻微可变速度。
+- 第一段完成后停顿约 350ms，再开始输入第二段。
+- 不删除、不循环；输入完成后正文保持完整显示。
+- 输入期间显示一条细竖线光标；第二段完成后隐藏光标。
+- 动画开始前预留完整正文的最终高度，避免简历下载链接和周围版式跳动。
 
-## Accessibility and Fallbacks
+## 无障碍与降级
 
-- The final complete copy remains available to assistive technology rather than exposing every intermediate character update.
-- With `prefers-reduced-motion: reduce`, render both paragraphs immediately and omit the cursor animation.
-- If IntersectionObserver is unavailable, begin typing after mount rather than leaving the copy blank.
-- The feature must work consistently on desktop, tablet, and touch devices.
+- 辅助技术读取完整的最终正文，不逐字播报中间状态。
+- 开启 `prefers-reduced-motion: reduce` 时，直接显示两段完整正文，并关闭光标动画。
+- 浏览器不支持 IntersectionObserver 时，在组件挂载后直接开始输入，不让正文持续空白。
+- 桌面、平板和触屏设备使用一致的内容顺序。
 
-## Component Boundaries
+## 组件边界
 
-- A focused client-side `TextType` component owns visibility detection, typing state, timers, cursor animation, and cleanup.
-- `About` supplies the two existing paragraphs as an ordered text array and renders the résumé link unchanged.
-- About-specific CSS preserves the existing Songti/serif typography, paragraph rhythm, cursor treatment, and reserved layout space.
+- 独立的客户端 `TextType` 组件负责可见性检测、输入状态、计时器、光标动画和卸载清理。
+- `About` 将现有两段正文作为有序文本数组传入，简历下载链接保持不变。
+- About 专用样式负责保留当前宋体/衬线字体、段落节奏、光标表现和预留高度。
 
-## Validation
+## 验证
 
-- TypeScript and the production build must pass.
-- Verify first-to-second paragraph sequencing, final cursor removal, and stable résumé-link position.
-- Verify reopening the About overlay starts a clean animation without orphaned timers.
-- Verify reduced-motion displays complete copy immediately.
-- Confirm the handwritten title, portrait, navigation, Hero, and other overlay pages remain unchanged.
+- TypeScript 与生产构建必须通过。
+- 检查第一段到第二段的顺序、最终光标隐藏和简历链接位置稳定。
+- 检查关闭并重新打开 About 后动画能重新开始，且不存在遗留计时器。
+- 检查 reduced-motion 模式下正文立即完整显示。
+- 确认手写标题、人像、导航、Hero 和其他浮层页面不受影响。
 
