@@ -5,9 +5,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ),
-  title: "KINSLEY XIE — Creative Marketer",
+  title: "KINSLEY XIE — The Living Archive",
   description:
-    "谢可心的品牌营销与内容运营作品集，聚焦 Brand Marketing、Content Operation、Social Media 与 Visual Storytelling。",
+    "谢可心的品牌营销与内容运营数字档案，记录观察、策略、内容与视觉实践。",
   keywords: [
     "Kinsley Xie",
     "谢可心",
@@ -21,16 +21,16 @@ export const metadata: Metadata = {
     shortcut: "/favicon.svg",
   },
   openGraph: {
-    title: "KINSLEY XIE — Creative Marketer",
-    description: "Brand Marketing / Content Operation / Visual Storytelling",
+    title: "KINSLEY XIE — The Living Archive",
+    description: "Creative Marketing / Content Operation / Visual Storytelling",
     type: "website",
     locale: "zh_CN",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "KINSLEY XIE" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "KINSLEY XIE — Creative Marketer",
-    description: "Brand Marketing / Content Operation / Visual Storytelling",
+    title: "KINSLEY XIE — The Living Archive",
+    description: "Creative Marketing / Content Operation / Visual Storytelling",
     images: ["/og.png"],
   },
 };

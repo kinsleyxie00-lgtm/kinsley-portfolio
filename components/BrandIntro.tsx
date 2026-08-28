@@ -4,288 +4,187 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { introConfig } from "@/data/intro";
 
-type IntroPhase =
-  | "initial"
-  | "ksx"
-  | "expanded"
-  | "matrix"
-  | "seeking"
-  | "brand"
-  | "complete";
-
-const ease = [0.16, 1, 0.3, 1] as const;
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function BrandIntro() {
-  const reduceMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion();
+  const [visible, setVisible] = useState(true);
+  const [queryMotion, setQueryMotion] = useState<
+    "default" | "full" | "reduced"
+  >("default");
+  const [clientReady, setClientReady] = useState(false);
+  const forceReducedMotion = queryMotion === "reduced";
   const forceFullMotion =
     (process.env.NODE_ENV === "development" &&
       introConfig.forceFullMotionInDevelopment) ||
-    (typeof window !== "undefined" &&
-      new URLSearchParams(window.location.search).get(
-        introConfig.forceFullMotionQuery,
-      ) === "1");
-  const forceReducedMotion =
-    typeof window !== "undefined" &&
-    new URLSearchParams(window.location.search).get(
-      introConfig.forceReducedMotionQuery,
-    ) === "1";
-  const shouldReduceMotion = Boolean(
-    forceReducedMotion || (reduceMotion && !forceFullMotion),
+    queryMotion === "full";
+  const reducedMotion = Boolean(
+    forceReducedMotion || (prefersReducedMotion && !forceFullMotion),
   );
-  const [phase, setPhase] = useState<IntroPhase>("initial");
-  const [visible, setVisible] = useState(true);
-  const [seekingIndex, setSeekingIndex] = useState(0);
 
   useEffect(() => {
-    const forceFromQuery =
-      new URLSearchParams(window.location.search).get(introConfig.forceReplayQuery) ===
-      "1";
+    const params = new URLSearchParams(window.location.search);
+    setQueryMotion(
+      params.get(introConfig.forceReducedMotionQuery) === "1"
+        ? "reduced"
+        : params.get(introConfig.forceFullMotionQuery) === "1"
+          ? "full"
+          : "default",
+    );
+    setClientReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!clientReady) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const forceReplay = params.get(introConfig.forceReplayQuery) === "1";
     const forceInDevelopment =
       process.env.NODE_ENV === "development" &&
       introConfig.forceReplayInDevelopment;
     const hasPlayed = sessionStorage.getItem(introConfig.storageKey) === "played";
 
-    if (hasPlayed && !forceFromQuery && !forceInDevelopment) {
+    if (hasPlayed && !forceReplay && !forceInDevelopment) {
       setVisible(false);
-      setPhase("complete");
       return;
     }
 
     const previousOverflow = document.documentElement.style.overflow;
+    const previousScrollRestoration = window.history.scrollRestoration;
+    const resetToHomepage = () => {
+      if (window.location.hash) {
+        window.history.replaceState(
+          window.history.state,
+          "",
+          `${window.location.pathname}${window.location.search}`,
+        );
+      }
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    };
+
+    window.history.scrollRestoration = "manual";
+    resetToHomepage();
     document.documentElement.style.overflow = "hidden";
     document.body.dataset.intro = "running";
+    let completionFrame: number | null = null;
 
-    const timers: number[] = [];
-    const schedule = (callback: () => void, delay: number) => {
-      timers.push(window.setTimeout(callback, delay));
-    };
-
-    if (shouldReduceMotion) {
-      setPhase("brand");
-      schedule(() => {
+    const timer = window.setTimeout(
+      () => {
+        resetToHomepage();
         sessionStorage.setItem(introConfig.storageKey, "played");
-        setPhase("complete");
         setVisible(false);
-      }, introConfig.reducedMotionDuration);
-    } else {
-      schedule(() => setPhase("ksx"), introConfig.phases.ksx);
-      schedule(() => setPhase("expanded"), introConfig.phases.expanded);
-      schedule(() => setPhase("matrix"), introConfig.phases.matrix);
-      schedule(() => setPhase("seeking"), introConfig.phases.seeking);
-      const compact = window.matchMedia("(max-width: 520px)").matches;
-      if (compact) {
-        schedule(
-          () => setSeekingIndex(introConfig.seekingWords.length - 1),
-          introConfig.phases.seeking,
-        );
-      } else {
-        introConfig.seekingWords.forEach((_, index) => {
-          schedule(
-            () => setSeekingIndex(index),
-            introConfig.phases.seeking + index * 120,
-          );
-        });
-      }
-      schedule(() => setPhase("brand"), introConfig.phases.brand);
-      schedule(() => {
-        sessionStorage.setItem(introConfig.storageKey, "played");
-        setPhase("complete");
-        setVisible(false);
-      }, introConfig.phases.complete);
-    }
+        completionFrame = window.requestAnimationFrame(resetToHomepage);
+      },
+      reducedMotion
+        ? introConfig.reducedMotionDuration
+        : introConfig.fadeOutAt,
+    );
 
     return () => {
-      timers.forEach(window.clearTimeout);
+      window.clearTimeout(timer);
+      if (completionFrame !== null) {
+        window.cancelAnimationFrame(completionFrame);
+      }
       document.documentElement.style.overflow = previousOverflow;
+      window.history.scrollRestoration = previousScrollRestoration;
       delete document.body.dataset.intro;
     };
-  }, [shouldReduceMotion]);
+  }, [clientReady, reducedMotion]);
 
   useEffect(() => {
-    if (phase !== "complete") return;
+    if (visible) return;
     document.documentElement.style.overflow = "";
     delete document.body.dataset.intro;
-  }, [phase]);
+  }, [visible]);
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          className={`brand-intro brand-intro--${phase}`}
+          className="brand-intro"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: shouldReduceMotion ? 0.05 : 0.38, ease }}
+          exit={{ opacity: 0, pointerEvents: "none" }}
+          transition={{
+            duration: reducedMotion
+              ? introConfig.reducedExitDuration
+              : introConfig.exitDuration,
+            ease,
+          }}
           aria-label="KINSLEY XIE"
         >
-          <div className="brand-intro__stage">
-            <motion.div
-              className="brand-intro__ksx"
-              initial={{ opacity: 0, scale: 1.1, filter: "blur(12px)" }}
-              animate={{
-                opacity: phase === "initial" ? 0 : phase === "ksx" ? 1 : 0,
-                scale: phase === "ksx" ? 0.92 : 0.88,
-                filter: phase === "ksx" ? "blur(0px)" : "blur(0px)",
-              }}
-              transition={{ duration: 0.55, ease }}
-              aria-hidden={phase !== "ksx"}
-            >
-              KSX
-            </motion.div>
+          {reducedMotion ? (
+            <div className="brand-intro__reduced">KINSLEY XIE</div>
+          ) : (
+            <>
+              <motion.div
+                className="brand-intro__ksx"
+                initial={{ opacity: 0, scale: 1 }}
+                animate={{
+                  opacity: [0, 0, 1, 1, 1, 0],
+                  scale: [1, 1, 1, 1, 0.05, 0.05],
+                }}
+                transition={{
+                  duration: introConfig.ksxDuration,
+                  times: [0, 0.21, 0.215, 0.5, 0.95, 1],
+                  ease: [0.4, 0, 0.2, 1],
+                }}
+                aria-hidden="true"
+              >
+                KSX
+              </motion.div>
 
-            <motion.div
-              className="brand-intro__expanded"
-              initial={false}
-              animate={{
-                opacity:
-                  phase === "expanded" ||
-                  phase === "matrix" ||
-                  phase === "seeking"
-                    ? 1
-                    : 0,
-              }}
-              transition={{ duration: 0.18 }}
-              aria-hidden={
-                phase !== "expanded" &&
-                phase !== "matrix" &&
-                phase !== "seeking"
-              }
-            >
-              <IntroLine primary phase={phase} seekingIndex={seekingIndex} />
-            </motion.div>
+              <motion.div
+                className="brand-intro__lead"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: [0, 1, 1, 0], y: [6, 0, 0, 0] }}
+                transition={{
+                  delay: introConfig.leadDelay,
+                  duration: 0.86,
+                  times: [0, 0.16, 0.62, 1],
+                  ease,
+                }}
+                aria-hidden="true"
+              >
+                <span>KINSLEY</span>
+                <span>SEEKING</span>
+                <span>X</span>
+              </motion.div>
 
-            <motion.div
-              className="brand-intro__matrix"
-              initial={false}
-              animate={{
-                opacity:
-                  phase === "matrix" || phase === "seeking" ? 1 : 0,
-              }}
-              aria-hidden="true"
-            >
-              {Array.from({ length: introConfig.matrixRows }).map((_, index) => (
-                <motion.div
-                  className={`brand-intro__matrix-row ${
-                    index === Math.floor(introConfig.matrixRows / 2)
-                      ? "is-center"
-                      : ""
-                  }`}
-                  key={index}
-                  initial={{ opacity: 0, clipPath: "inset(0 50% 0 50%)" }}
-                  animate={{
-                    opacity:
-                      phase === "matrix"
-                        ? index === Math.floor(introConfig.matrixRows / 2)
-                          ? 0
-                          : 0.42
-                        : phase === "seeking"
-                          ? 0
-                          : 0,
-                    clipPath:
-                      phase === "matrix"
-                        ? "inset(0 0% 0 0%)"
-                        : "inset(0 50% 0 50%)",
-                    y:
-                      phase === "matrix"
-                        ? 0
-                        : (index - Math.floor(introConfig.matrixRows / 2)) *
-                          -8,
-                  }}
-                  transition={{
-                    duration: 0.42,
-                    delay:
-                      phase === "matrix"
-                        ? Math.abs(
-                            index - Math.floor(introConfig.matrixRows / 2),
-                          ) * 0.045
-                        : 0,
-                    ease,
-                  }}
-                >
-                  <span>KINSLEY</span>
-                  <span>SEEKING</span>
-                  <span>X</span>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            <motion.div
-              className="brand-intro__brand"
-              initial={false}
-              animate={{
-                opacity: phase === "brand" ? 1 : 0,
-                x: phase === "brand" ? 0 : "42vw",
-                y: phase === "brand" ? 0 : "44vh",
-                scale: phase === "brand" ? 1 : 12,
-              }}
-              transition={{ duration: shouldReduceMotion ? 0.05 : 0.62, ease }}
-              aria-hidden={phase !== "brand"}
-            >
-              KINSLEY XIE
-            </motion.div>
-          </div>
+              <motion.div
+                className="brand-intro__matrix"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{
+                  delay: introConfig.matrixDelay,
+                  duration: introConfig.matrixDuration,
+                  ease,
+                }}
+                aria-hidden="true"
+              >
+                {Array.from({ length: introConfig.matrixRows }).map((_, index) => (
+                  <motion.div
+                    className="brand-intro__matrix-row"
+                    key={index}
+                    initial={{ opacity: 0, y: index < 7 ? 6 : -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay:
+                        introConfig.matrixDelay +
+                        Math.abs(index - 7) * 0.035,
+                      duration: 0.34,
+                      ease,
+                    }}
+                  >
+                    <span>KINSLEY</span>
+                    <span>SEEKING</span>
+                    <span>X</span>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
-  );
-}
-
-function IntroLine({
-  primary,
-  phase,
-  seekingIndex,
-}: {
-  primary?: boolean;
-  phase: IntroPhase;
-  seekingIndex: number;
-}) {
-  const showExpansion =
-    phase === "expanded" || phase === "matrix" || phase === "seeking";
-  const seekingWord =
-    phase === "seeking" ? introConfig.seekingWords[seekingIndex] : "X";
-
-  return (
-    <div className={`brand-intro__line ${primary ? "is-primary" : ""}`}>
-      <span className="brand-intro__grow">
-        <b>K</b>
-        <motion.i
-          initial={false}
-          animate={{
-            maxWidth: showExpansion ? "7em" : 0,
-            opacity: showExpansion ? 1 : 0,
-            x: showExpansion ? 0 : -18,
-          }}
-          transition={{ duration: 0.48, ease }}
-        >
-          INSLEY
-        </motion.i>
-      </span>
-      <span className="brand-intro__grow">
-        <b>S</b>
-        <motion.i
-          initial={false}
-          animate={{
-            maxWidth: showExpansion ? "7em" : 0,
-            opacity: showExpansion ? 1 : 0,
-            x: showExpansion ? 0 : -18,
-          }}
-          transition={{ duration: 0.48, delay: 0.05, ease }}
-        >
-          EEKING
-        </motion.i>
-      </span>
-      <span className="brand-intro__word-window">
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.b
-            key={seekingWord}
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: "0%", opacity: 1 }}
-            exit={{ y: "-100%", opacity: 0 }}
-            transition={{ duration: 0.12, ease }}
-          >
-            {seekingWord}
-          </motion.b>
-        </AnimatePresence>
-      </span>
-    </div>
   );
 }

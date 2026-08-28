@@ -7,18 +7,25 @@ export type ProjectItem = {
   execution: string;
   result: string;
   cover: string;
+  metrics?: { value: string; label: string }[];
 };
 
 export const projects: ProjectItem[] = [
   {
     number: "CASE 01",
-    title: "NIO Firefly Marketing Campaign",
-    category: "BRAND MARKETING / CAMPAIGN",
-    background: "围绕 firefly 萤火虫新车型上市节点展开区域传播与线下活动。",
-    role: "内容策划、KOC 协作、供应商对接、线下执行",
-    execution: "内容日历、合作 brief、多平台内容分发与“萤光车队巡游”现场支持。",
-    result: "完成既定传播与活动执行；真实项目素材与详细复盘待补充。",
-    cover: "/images/projects/nio-firefly.jpg",
+    title: "firefly halo Big Day",
+    category: "REGIONAL CAMPAIGN / 2026",
+    background: "围绕 halo 寻光系列嘉兴发布，以“萤光车队巡游 + 痛屋快闪”串联城市曝光与沉浸体验。",
+    role: "区域内容策划、KOC 筛选建联、合作 brief、多平台分发与现场协同。",
+    execution: "规划 7 日传播节奏，推进官方图文与视频、KOC 内容及现场 UGC 机制落地。",
+    result: "复盘显示共出刊 56 篇、总播放 138 万、ROI 43.65；现场产出 UGC 24 条，投票参与 490+。",
+    cover: "/images/projects/firefly-halo.jpg",
+    metrics: [
+      { value: "56", label: "内容出刊" },
+      { value: "138w+", label: "总播放" },
+      { value: "43.65", label: "ROI" },
+      { value: "24", label: "UGC" },
+    ],
   },
   {
     number: "CASE 02",

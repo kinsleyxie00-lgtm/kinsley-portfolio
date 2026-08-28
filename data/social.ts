@@ -1,13 +1,13 @@
 export const social = {
   platform: "XIAOHONGSHU",
-  username: "时尚穿搭账号",
+  username: "imco_o0",
   focus: ["Fashion Styling", "Visual Content", "Trend Insight"],
-  profileUrl: "",
-  screenshot: "/images/social/xiaohongshu-profile.jpg",
+  profileUrl: "https://xhslink.cn/m/56JOY6Rblxs",
+  screenshot: "/images/social/xiaohongshu-profile.png",
   stats: [
-    { value: "1,500+", label: "FOLLOWERS" },
-    { value: "30,000+", label: "最高浏览" },
-    { value: "3,000+", label: "单篇赞藏" },
+    { value: "1.5K+", label: "FOLLOWERS" },
+    { value: "50K+", label: "最高浏览" },
+    { value: "4K+", label: "最高赞藏" },
     { value: "14,000+", label: "累计赞藏" },
   ],
 } as const;
