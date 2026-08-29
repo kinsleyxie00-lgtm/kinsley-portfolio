@@ -2,7 +2,7 @@
 
 ## Goal
 
-Publish the KINSLEY XIE marketing portfolio from a public GitHub repository named `kinsley-xie-portfolio`, with automatic redeployment after updates to the default branch.
+Publish the KINSLEY XIE marketing portfolio from the public GitHub repository named `kinsley-portfolio`, with automatic redeployment after updates to the default branch.
 
 ## Chosen approach
 
@@ -11,14 +11,14 @@ Use Next.js static export and a GitHub Actions Pages workflow. This is preferred
 ## Repository and URL
 
 - Owner: `kinsleyxie00-lgtm`
-- Repository: `kinsley-xie-portfolio`
+- Repository: `kinsley-portfolio`
 - Visibility: public
-- Expected project URL: `https://kinsleyxie00-lgtm.github.io/kinsley-xie-portfolio/`
+- Expected project URL: `https://kinsleyxie00-lgtm.github.io/kinsley-portfolio/`
 
 ## Build design
 
 - Configure Next.js with `output: "export"`.
-- Apply the repository base path in GitHub Actions builds so generated assets resolve under `/kinsley-xie-portfolio`.
+- Apply the repository base path in GitHub Actions builds so generated assets resolve under `/kinsley-portfolio`.
 - Keep local development at `/` with no base path.
 - Disable image optimization only if required by static export.
 - Preserve the current client-side portfolio interactions, WebGL effects, modal behavior, and browser-specific video controls.

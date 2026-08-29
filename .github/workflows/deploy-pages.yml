@@ -37,8 +37,8 @@ jobs:
 
       - name: Build static site
         env:
-          PAGES_BASE_PATH: /kinsley-xie-portfolio
-          NEXT_PUBLIC_SITE_URL: https://kinsleyxie00-lgtm.github.io/kinsley-xie-portfolio/
+          PAGES_BASE_PATH: /kinsley-portfolio
+          NEXT_PUBLIC_SITE_URL: https://kinsleyxie00-lgtm.github.io/kinsley-portfolio/
         run: pnpm build:pages
 
       - name: Configure Pages
