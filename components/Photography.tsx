@@ -147,12 +147,12 @@ export default function Photography() {
                 </dl>
                 <p className="postcard__memory">{selected.memory}</p>
                 <div className="postcard__stamp" aria-hidden="true">
-                  <img src="/images/photography/botanical-collage-stamp.png" alt="" />
+                  <img src="./images/photography/botanical-collage-stamp.png" alt="" />
                   <i /><i /><i />
                 </div>
                 <div className="postcard__postmark" aria-hidden="true">MEMORIES<br /><b>{selected.year}</b><br />GARDEN</div>
                 <div className="postcard__botanical-mark" aria-hidden="true"><i /><i /><i /></div>
-                <div className="postcard__signature"><img src="/images/kinsley-signature.png" alt="Kinsley" /></div>
+                <div className="postcard__signature"><img src="./images/kinsley-signature.png" alt="Kinsley" /></div>
               </div>
             </motion.article>
 

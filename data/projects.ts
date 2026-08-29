@@ -19,7 +19,7 @@ export const projects: ProjectItem[] = [
     role: "区域内容策划、KOC 筛选建联、合作 brief、多平台分发与现场协同。",
     execution: "规划 7 日传播节奏，推进官方图文与视频、KOC 内容及现场 UGC 机制落地。",
     result: "复盘显示共出刊 56 篇、总播放 138 万、ROI 43.65；现场产出 UGC 24 条，投票参与 490+。",
-    cover: "/images/projects/firefly-halo.jpg",
+    cover: "./images/projects/firefly-halo.jpg",
     metrics: [
       { value: "56", label: "内容出刊" },
       { value: "138w+", label: "总播放" },
@@ -35,7 +35,7 @@ export const projects: ProjectItem[] = [
     role: "内容策划、选品包装、视觉制作、数据复盘",
     execution: "每周主题规划、节日企划、定向推送与商品信息库优化。",
     result: "支持 Q2 内容运营与会场增长；真实页面截图与复盘待补充。",
-    cover: "/images/projects/dewu-fashion.jpg",
+    cover: "./images/projects/dewu-fashion.jpg",
   },
   {
     number: "CASE 03",
@@ -45,6 +45,6 @@ export const projects: ProjectItem[] = [
     role: "账号定位、内容策划、视觉创作、流量运营",
     execution: "围绕趋势与季节热点完成选题、造型、精修、标题和标签优化。",
     result: "1,500+ 粉丝，最高浏览 30,000+，单篇赞藏 3,000+。",
-    cover: "/images/projects/xiaohongshu.jpg",
+    cover: "./images/projects/xiaohongshu.jpg",
   },
 ];

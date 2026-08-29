@@ -11,24 +11,24 @@ const creatorWorks = [
     number: "01",
     title: "拒绝穿搭内耗｜如何穿出 ins 感韩女味🤍 5/100",
     likes: "3162",
-    cover: "/images/social/xiaohongshu-video-05-cover.jpg",
-    video: "/videos/xiaohongshu-05.mp4?v=20260827-h264-mp42",
+    cover: "./images/social/xiaohongshu-video-05-cover.jpg",
+    video: "./videos/xiaohongshu-05.mp4?v=20260827-h264-mp42",
     href: "https://www.xiaohongshu.com/discovery/item/699063cc00000000280218c0?source=webshare&xhsshare=pc_web&xsec_token=ABHoY7gQp_aXlm_OyvUUYQWPM0ps2RA8yY-27uaZo7UF8=&xsec_source=pc_share",
   },
   {
     number: "02",
     title: "拒绝穿搭内耗｜如何穿出 ins 感韩女味💌 8/100",
     likes: "1065",
-    cover: "/images/social/xiaohongshu-video-08-cover.jpg",
-    video: "/videos/xiaohongshu-08.mp4?v=20260827-h264-mp42",
+    cover: "./images/social/xiaohongshu-video-08-cover.jpg",
+    video: "./videos/xiaohongshu-08.mp4?v=20260827-h264-mp42",
     href: "https://www.xiaohongshu.com/discovery/item/69999d22000000000e00da59?source=webshare&xhsshare=pc_web&xsec_token=ABmiLVP-x6RoPN-swQEQ_Om9Kpi4f3pV3adKrNAYmomEc=&xsec_source=pc_share",
   },
   {
     number: "03",
     title: "拒绝穿搭内耗｜如何穿出 ins 感韩女味✨ 1/100",
     likes: "868",
-    cover: "/images/social/xiaohongshu-video-01-cover.jpg",
-    video: "/videos/xiaohongshu-01.mp4?v=20260827-h264-mp42",
+    cover: "./images/social/xiaohongshu-video-01-cover.jpg",
+    video: "./videos/xiaohongshu-01.mp4?v=20260827-h264-mp42",
     href: "https://www.xiaohongshu.com/discovery/item/6985d80e000000001a02e784?source=webshare&xhsshare=pc_web&xsec_token=ABJGPQ4g5_toP14yvzCNeoYJsdUDSZqnK3zeApivOylZQ=&xsec_source=pc_share",
   },
 ] as const;
@@ -118,7 +118,7 @@ function MovingImagePlayer() {
         disablePictureInPicture={!useNativeControls}
         playsInline
         preload="metadata"
-        poster="/images/social/toxic-till-the-end-poster.jpg"
+        poster="./images/social/toxic-till-the-end-poster.jpg"
         onPlay={() => setPlaying(true)}
         onPlaying={() => setPlaying(true)}
         onTimeUpdate={(event) => {
@@ -137,12 +137,12 @@ function MovingImagePlayer() {
           setPlaying(false);
         }}
       >
-        <source src="/videos/toxic-till-the-end.mp4?v=20260827-h264-mp42" type="video/mp4" />
+        <source src="./videos/toxic-till-the-end.mp4?v=20260827-h264-mp42" type="video/mp4" />
       </video>
       {!useNativeControls && !started && (
         <img
           className="moving-image-player__poster"
-          src="/images/social/toxic-till-the-end-poster.jpg"
+          src="./images/social/toxic-till-the-end-poster.jpg"
           alt=""
           aria-hidden="true"
         />
@@ -393,7 +393,7 @@ export default function Projects({ onStackActiveChange }: ProjectsProps) {
                 data-cursor="CLOSE"
               />
               <img
-                src="/images/projects/firefly-big-day-case-selected.png"
+                src="./images/projects/firefly-big-day-case-selected.png"
                 alt="firefly Big Day 整合营销项目案例长图"
               />
             </div>

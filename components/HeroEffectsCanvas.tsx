@@ -203,7 +203,7 @@ const HeroEffectsCanvas = forwardRef<HeroEffectsHandle, HeroEffectsCanvasProps>(
       if (loadedCount === 3) { host.dataset.effects = "ready"; if (!interactive) draw(performance.now()); }
     };
     const fail = () => { host.dataset.effects = "fallback"; };
-    loader.load("/images/hero-photo-final-v2.png", (loadedTexture) => {
+    loader.load("./images/hero-photo-final-v2.png", (loadedTexture) => {
       if (disposed) return loadedTexture.dispose();
       texture = loadedTexture;
       texture.colorSpace = THREE.SRGBColorSpace;
@@ -214,7 +214,7 @@ const HeroEffectsCanvas = forwardRef<HeroEffectsHandle, HeroEffectsCanvasProps>(
     }, undefined, fail);
     const waterUniforms = [uniforms.uWaterMask, uniforms.uWaterDepth];
     ["water-mask.png", "water-depth.png"].forEach((filename, index) => {
-      loader.load(`/images/hero-assets/${filename}`, (loadedTexture) => {
+      loader.load(`./images/hero-assets/${filename}`, (loadedTexture) => {
         if (disposed) return loadedTexture.dispose();
         loadedTexture.colorSpace = THREE.NoColorSpace;
         loadedTexture.minFilter = THREE.LinearFilter;

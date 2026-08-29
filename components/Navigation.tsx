@@ -54,7 +54,7 @@ export default function Navigation({ activeView, hidden = false, onOpen, onHome 
       transition={{ duration: 0.8, delay: 0.45 }}
     >
       <button className={`navigation__brand ${showSignature ? "navigation__brand--signature" : ""}`} onClick={onHome} aria-label="进入 Hero" data-cursor="OPEN" data-cursor-mode="nav" data-attract="text">
-        {showSignature ? <img src="/images/kinsley-signature.png" alt="Kinsley" /> : "K.X"}
+        {showSignature ? <img src="./images/kinsley-signature.png" alt="Kinsley" /> : "K.X"}
       </button>
       <nav className="navigation__desktop" aria-label="主导航">
         {links.map((link) => (

@@ -6,8 +6,8 @@ export const profile = {
   availability: "AVAILABLE FOR OPPORTUNITIES",
   email: "13382085646@163.com",
   phone: "13382085646",
-  resume: "/resume.pdf",
-  portrait: "/images/profile.jpg",
+  resume: "./resume.pdf",
+  portrait: "./images/profile.jpg",
   disciplines: [
     "Brand Strategy",
     "Content Creation",

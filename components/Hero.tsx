@@ -76,10 +76,10 @@ export default function Hero({ onEnter }: { onEnter: (view: PlantView) => void }
   return (
     <section id="top" className="hero hero--entrance" onPointerMove={handlePointerMove} onPointerLeave={resetParallax} aria-label="Kinsley Xie interactive portfolio entrance">
       <div className="hero-scene" ref={scene}>
-        <img className="hero-scene__image hero-scene__image--photo" src="/images/hero-photo-final-v2.png" alt="" />
+        <img className="hero-scene__image hero-scene__image--photo" src="./images/hero-photo-final-v2.png" alt="" />
         <HeroEffectsCanvas ref={effects} reducedMotion={reduceMotion} />
         <div className="hero-sketch-overlay" aria-hidden="true">
-          <img className="hero-scene__image hero-scene__image--line-overlay" src="/images/hero-line-overlay-final-v2.png" alt="" />
+          <img className="hero-scene__image hero-scene__image--line-overlay" src="./images/hero-line-overlay-final-v2.png" alt="" />
         </div>
       </div>
 

@@ -21,7 +21,7 @@ export const experience: ExperienceItem[] = [
       "参与 big day 内容日历规划，对接本地 KOC 并跟进内容交付。",
       "参与“萤光车队巡游”全流程，支持物料、路线、UGC 互动区与现场执行。",
     ],
-    image: "/images/experience/nio.jpg",
+    image: "./images/experience/nio.jpg",
   },
   {
     company: "得物 DEWU",
@@ -35,7 +35,7 @@ export const experience: ExperienceItem[] = [
       "每周进行 3-4 次定向触达，策划母亲节、520 等节日内容。",
       "定期复盘运营效果，优化选品、内容类别与用户服务流程。",
     ],
-    image: "/images/experience/dewu.jpg",
+    image: "./images/experience/dewu.jpg",
   },
   {
     company: "新华日报南京分社",
@@ -44,6 +44,6 @@ export const experience: ExperienceItem[] = [
     tags: ["Media Content", "Video Production"],
     summary: "参与媒体内容生产，积累从拍摄到成片的全流程制作经验。",
     highlights: ["拍摄与素材整理", "视频剪辑与内容包装", "媒体内容生产流程"],
-    image: "/images/experience/xinhua.jpg",
+    image: "./images/experience/xinhua.jpg",
   },
 ];

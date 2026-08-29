@@ -11,11 +11,11 @@ const aboutCopy = [
 ];
 
 const portraitItems: DepthCarouselItem[] = [
-  { image: "/images/about-carousel/kinsley-01.jpg", alt: "Kinsley Xie 在创意拍摄现场工作" },
-  { image: "/images/about-carousel/kinsley-02.jpg", alt: "Kinsley Xie 在海边街道" },
-  { image: "/images/about-carousel/kinsley-03.jpg", alt: "Kinsley Xie 在城市街道" },
-  { image: "/images/about-carousel/kinsley-04.jpg", alt: "Kinsley Xie 的旅行生活照" },
-  { image: "/images/about-carousel/kinsley-05.jpg", alt: "Kinsley Xie 在林间阳光下" },
+  { image: "./images/about-carousel/kinsley-01.jpg", alt: "Kinsley Xie 在创意拍摄现场工作" },
+  { image: "./images/about-carousel/kinsley-02.jpg", alt: "Kinsley Xie 在海边街道" },
+  { image: "./images/about-carousel/kinsley-03.jpg", alt: "Kinsley Xie 在城市街道" },
+  { image: "./images/about-carousel/kinsley-04.jpg", alt: "Kinsley Xie 的旅行生活照" },
+  { image: "./images/about-carousel/kinsley-05.jpg", alt: "Kinsley Xie 在林间阳光下" },
 ];
 
 export default function About() {
@@ -34,7 +34,7 @@ export default function About() {
         <p className="precision-kicker">01 / Profile</p>
         <div data-reveal="title">
           <h1 className="precision-about__handwritten" data-attract="text">
-            <img src="/images/type/about-me-handwritten-cutout-v3.png" alt="about me" />
+            <img src="./images/type/about-me-handwritten-cutout-v3.png" alt="about me" />
           </h1>
         </div>
         <div data-reveal="body">
